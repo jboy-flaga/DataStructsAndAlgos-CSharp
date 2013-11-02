@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LinkedListNode.cs" />
     <Compile Include="SimpleLinkedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,109 +1,159 @@
 ﻿using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 
 namespace DataStuctsAndAlgos.CSharp
 {
     public class SimpleLinkedList<T>
     {
-        private class Cell
-        {
-            public T Item;
-            public Cell Link;
-        }
+        #region Private Fields
+        private LinkedListNode<T> _head;
+        private LinkedListNode<T> _tail;
+        #endregion
 
-        private Cell _first;
-        private Cell _last;
-        private int _length;
+        #region Public Properties
 
-        public int Length
-        {
-            get { return _length; }
-            set { _length = value; }
-        }
-
-        public T First
-        {
-            get { return this._first.Link == null ? default(T) : this._first.Link.Item; }
-        }
-
-        public T Last
-        {
-            get { return this._length == 0 ? default(T) : this[this._length - 1]; }
-        }
-
-        public SimpleLinkedList()
-        {
-            Cell dummyCell = new Cell { Item = default(T), Link = null };
-            this._first = dummyCell;
-            this._last = dummyCell;
-            this._length = 0;
-        }
-
-        public T this[int index]
+        public LinkedListNode<T> First
         {
             get
             {
-                if (this._first.Link == null) { throw new IndexOutOfRangeException(); }
-                if (index >= this._length) { throw new IndexOutOfRangeException(); }
-
-                Cell currentCell = this._first.Link;
-                for (int i = 0; i < index; i++)
+                if (this.IsEmpty)
                 {
-                    currentCell = currentCell.Link;
+                    throw new InvalidOperationException("First cannot be called if list is empty");
                 }
-
-                return currentCell.Item;
-            }
-            set
-            {
-                if (this._first.Link == null) { throw new IndexOutOfRangeException(); }
-                if (index >= this._length) { throw new IndexOutOfRangeException(); }
-
-                Cell currentCell = this._first.Link;
-                for (int i = 0; i < index; i++)
-                {
-                    currentCell = currentCell.Link;
-                }
-
-                currentCell.Item = (T)value;
+                return this._head;
             }
         }
 
-        public void Insert(T item)
+        public LinkedListNode<T> Last
         {
-            Cell newCell = new Cell { Item = item, Link = null };
-            this._last.Link = newCell;
-            this._last = newCell;
-            this._length++;
+            get
+            {
+                if (this.IsEmpty)
+                {
+                    throw new InvalidOperationException("Last cannot be called if list is empty");
+                }
+                return this._tail;
+            }
+        }
+
+        public int Count { get; private set; }
+
+        public bool IsEmpty
+        {
+            get { return this.Count <= 0; }
+        }
+        #endregion
+
+        #region Constructors
+        public SimpleLinkedList()
+        {
+            this.Count = 0;
+        }
+        #endregion
+
+        #region Public Methods
+        public LinkedListNode<T> Find(T item)
+        {
+            LinkedListNode<T> currentNode = this._head;
+            while (currentNode != null)
+            {
+                if (currentNode.Item.Equals(item))
+                {
+                    return currentNode;
+                }
+                currentNode = currentNode.Link;
+            }
+
+            return null;
+        }
+
+        public void AddFirst(T item)
+        {
+            LinkedListNode<T> newNode = new LinkedListNode<T> { Item = item, Link = null };
+
+            if (this._head == null)
+            {
+                this._head = this._tail = newNode;
+            }
+            else
+            {
+                newNode.Link = this._head;
+                this._head = newNode;
+            }
+
+            this.Count++;
+        }
+
+        public void AddLast(T item)
+        {
+            LinkedListNode<T> newNode = new LinkedListNode<T> { Item = item, Link = null };
+
+            if (this._tail == null)
+            {
+                this._head = this._tail = newNode;
+            }
+            else
+            {
+                this._tail.Link = newNode;
+                this._tail = newNode;
+            }
+
+            this.Count++;
         }
 
         /** 
          * returns null if object to be removed is not found in the list else returns the removed item
          * 
          * */
-        public T Remove(T item)
+        public bool Remove(T item)
         {
-            Cell previousCell = this._first;
-            Cell currentCell = this._first.Link;
-            while (currentCell != null)
+            LinkedListNode<T> previousNode = this._head;
+            LinkedListNode<T> currentNode = this._head;
+            while (currentNode != null)
             {
-                if (currentCell.Item.Equals(item))
+                if (currentNode.Item.Equals(item))
                 {
-                    previousCell.Link = currentCell.Link;
-                    // delete currentCell - currentCell will be garbase collected
-                    this._length--;
-                    return currentCell.Item;
+                    previousNode.Link = currentNode.Link;
+                    // at this point the previous currentNode will be ready for garbage collection
+                    this.Count--;
+                    return true;
                 }
 
-                Cell nextCell = currentCell.Link;
-                previousCell = currentCell;
-                currentCell = nextCell;
+                previousNode = currentNode;
+                currentNode = currentNode.Link;
             }
 
-            return default(T);
+            return false;
         }
+
+        public void RemoveFirst()
+        {
+            if (this.IsEmpty || this._head == null)
+            {
+                throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty");
+            }
+
+            this._head = this._head.Link;
+        }
+
+        public void RemoveLast()
+        {
+            if (this.IsEmpty || this._tail == null)
+            {
+                throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty");
+            }
+
+            LinkedListNode<T> currentNode = this._head;
+            while (currentNode != null)
+            {
+                if (currentNode.Link.Link == null)
+                {
+                    currentNode.Link = null;
+                    break;
+                }
+
+                currentNode = currentNode.Link;
+            }
+        }
+        #endregion
     }
 }
