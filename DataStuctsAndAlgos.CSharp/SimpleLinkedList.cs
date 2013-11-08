@@ -106,14 +106,36 @@ namespace DataStuctsAndAlgos.CSharp
          * */
         public bool Remove(T item)
         {
+            if (this._head.Item.Equals(item)) // if the item to be deleted is in the head of the list
+            {
+                if (object.ReferenceEquals(this._head, this._tail)) // if there in only one node in the list
+                {
+                    this._tail = this._head = this._head.Link;
+                }
+                else
+                {
+                    this._head = this._head.Link;
+                }
+                // at this point the node to be deleted (the previous head) will be ready for garbage collection
+
+                this.Count--;
+                return true;
+            }
+
             LinkedListNode<T> previousNode = this._head;
-            LinkedListNode<T> currentNode = this._head;
+            LinkedListNode<T> currentNode = this._head.Link;
             while (currentNode != null)
             {
                 if (currentNode.Item.Equals(item))
                 {
                     previousNode.Link = currentNode.Link;
-                    // at this point the previous currentNode will be ready for garbage collection
+                    // at this point the node to be deleted (the previous current node) will be ready for garbage collection
+
+                    if (object.ReferenceEquals(currentNode, this._tail)) // if the item to be deleted is in the tail of the list
+                    {
+                        this._tail = previousNode;
+                    }
+
                     this.Count--;
                     return true;
                 }
@@ -127,32 +149,44 @@ namespace DataStuctsAndAlgos.CSharp
 
         public void RemoveFirst()
         {
-            if (this.IsEmpty || this._head == null)
+            if (this.IsEmpty || this._head == null) { throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty"); }
+
+            if (this.Count == 1)
             {
-                throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty");
+                this._head = this._tail = null;
+            }
+            else
+            {
+                this._head = this._head.Link;
             }
 
-            this._head = this._head.Link;
+            this.Count--;
         }
 
         public void RemoveLast()
         {
-            if (this.IsEmpty || this._tail == null)
-            {
-                throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty");
-            }
+            if (this.IsEmpty || this._tail == null) { throw new InvalidOperationException("RemoveLast() cannot be called if the list is empty"); }
 
-            LinkedListNode<T> currentNode = this._head;
-            while (currentNode != null)
+            if (this.Count == 1)
             {
-                if (currentNode.Link.Link == null)
+                this._head = this._tail = null;
+            }
+            else
+            {
+                LinkedListNode<T> currentNode = this._head;
+                while (currentNode != null)
                 {
-                    currentNode.Link = null;
-                    break;
-                }
+                    if (currentNode.Link.Link == null)
+                    {
+                        currentNode.Link = null;                        
+                        break;
+                    }
 
-                currentNode = currentNode.Link;
+                    currentNode = currentNode.Link;
+                }
             }
+
+            this.Count--;
         }
         #endregion
     }

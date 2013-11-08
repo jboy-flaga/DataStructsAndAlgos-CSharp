@@ -9,27 +9,70 @@ namespace DataStructsAndAlgos.CSharp.Test
         public class FirstProperty
         {
             [Fact]
-            public void FirstProperty_ReturnsFirstItemInList()
+            public void FirstProperty_ReturnsTheCorrectNodeInListWithMultipleItems()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
+                linkedList.AddFirst("zxcv");
 
-                Assert.Equal("asdf", list.First.Item);
+                Assert.Equal("zxcv", linkedList.First.Item);
+            }
+
+            [Fact]
+            public void FirstProperty_ReturnsTheOnlyNodeInTheList()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+
+                Assert.Equal("asdf", linkedList.First.Item);
+            }
+
+            [Fact]
+            public void FirstProperty_ThrowsInvalidOperationExceptionIfListIsEmpty()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+
+                Assert.Throws<InvalidOperationException>(
+                    delegate
+                    {
+                        LinkedListNode<string> node = linkedList.First;
+                    });
             }
         }
 
         public class LastProperty
         {
             [Fact]
-            public void LastProperty_ReturnsLastItemInList()
+            public void LastProperty_ReturnsTheCorrectNodeInListWithMultipleItems()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
-                list.AddLast("zxcv");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
+                linkedList.AddFirst("zxcv");
 
-                Assert.Equal("zxcv", list.Last.Item);
+                Assert.Equal("asdf", linkedList.Last.Item);
+            }
+
+            [Fact]
+            public void LastProperty_ReturnsTheOnlyNodeInTheList()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+
+                Assert.Equal("asdf", linkedList.Last.Item);
+            }
+
+            [Fact]
+            public void LastProperty_ThrowsInvalidOperationExceptionIfListIsEmpty()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+
+                Assert.Throws<InvalidOperationException>(
+                    delegate
+                    {
+                        LinkedListNode<string> node = linkedList.Last;
+                    });
             }
         }
 
@@ -38,12 +81,13 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void CountProperty_ReturnsAccurateCount()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
-                list.AddLast("zxcv");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                int expectedCount = 0;
+                linkedList.AddLast("asdf"); expectedCount++;
+                linkedList.AddLast("qwer"); expectedCount++;
+                linkedList.AddLast("zxcv"); expectedCount++;
 
-                Assert.Equal(3, list.Count);
+                Assert.Equal(expectedCount, linkedList.Count);
             }
         }
 
@@ -52,144 +96,244 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void IsEmpty_ReturnsTrueIfListIsEmpty()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                Assert.True(list.IsEmpty);
+                Assert.True(linkedList.IsEmpty);
             }
 
             [Fact]
             public void IsEmpty_ReturnsFalseIfListIsNotEmpty()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("asdf");
 
-                Assert.False(list.IsEmpty);
+                Assert.False(linkedList.IsEmpty);
             }
         }
-
-
+        
         public class AddFirstMethod
         {
             [Fact]
             public void AddFirstMethod_AddsNewItemAtTheHeadOfList()
             {
                 // Arrange
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                string newItem1 = "new Item 1";
-                string newItem2 = "new Item 2";
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
                 // Act
-                list.AddFirst(newItem1);
-                list.AddFirst(newItem2);
+                linkedList.AddFirst("new Item 1");
 
                 // Assert
-                Assert.ReferenceEquals(list.First, newItem2);
-                Assert.Equal("new Item 2", list.First.Item);
+                Assert.ReferenceEquals(linkedList.First, "new Item 1");
+                Assert.Equal("new Item 1", linkedList.First.Item);
             }
 
+            [Fact]
+            public void AddFirstMethod_SetsTheLinkPropertyOfTheCurrentHeadToThePreviousHeadOfTheList()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+
+                // Act
+                linkedList.AddFirst("new Item 1");
+                linkedList.AddFirst("new Item 2");
+
+                // Assert
+                Assert.ReferenceEquals(linkedList.First.Link, "new Item 1");
+                Assert.Equal("new Item 1", linkedList.First.Link.Item);
+            }
 
             [Fact]
             public void AddFirstMethod_IncrementsLengthOfList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                int expectedCount = 0;
 
-                list.AddFirst("asdf");
+                linkedList.AddFirst("asdf"); expectedCount++;
 
-                Assert.True(list.Count == 1);
+                Assert.Equal(expectedCount, linkedList.Count);
             }
         }
 
         public class AddLastMethod
         {
             [Fact]
-            public void AddLastMethod_AddsNewItemAtTheEndOfList()
+            public void AddLastMethod_AddsNewItemAtTheTailOfList()
             {
                 // Arrange
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                string newItem1 = "new Item 1";
-                string newItem2 = "new Item 2";
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
                 // Act
-                list.AddLast(newItem1);
-                list.AddLast(newItem2);
+                linkedList.AddLast("new Item 1");
+                linkedList.AddLast("new Item 2");
 
                 // Assert
-                Assert.ReferenceEquals(list.Last, newItem2);
-                Assert.True(list.Last.Item == "new Item 2");
+                Assert.ReferenceEquals(linkedList.Last, "new Item 2");
+                Assert.True(linkedList.Last.Item == "new Item 2");
+            }
+
+            [Fact]
+            public void AddLastMethod_SetsTheLinkPropertyOfThePreviousTailToTheCurrentTailOfTheList()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+
+                // Act
+                linkedList.AddLast("new Item 1");
+                linkedList.AddLast("new Item 2");
+
+                // Assert
+                LinkedListNode<string> previousLastNode = linkedList.Find("new Item 1");
+                LinkedListNode<string> currentLastNode = linkedList.Find("new Item 2");
+
+                Assert.ReferenceEquals(previousLastNode.Link, currentLastNode);
+                Assert.Equal("new Item 2", previousLastNode.Link.Item);
             }
 
             [Fact]
             public void AddLastMethod_IncrementsLengthOfList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                list.AddLast("asdf");
+                linkedList.AddLast("asdf");
 
-                Assert.True(list.Count == 1);
+                Assert.True(linkedList.Count == 1);
             }
         }
 
         public class RemoveMethod
         {
             [Fact]
-            public void RemoveMethod_RemovesFirstItemFromList()
+            public void RemoveMethod_RemovesCorrectItemItemFromListWithMultipleItems()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("middle");
+                linkedList.AddFirst("qwer");
 
-                list.Remove("asdf");
+                linkedList.Remove("middle");
 
-                Assert.Null(list.Find("asdf"));
+                Assert.Null(linkedList.Find("middle"));
             }
 
             [Fact]
-            public void RemoveMethod_RemovesLastItemFromList()
+            public void RemoveMethod_RemovesTheOnlyItemFromList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
 
-                list.Remove("qwer");
+                linkedList.Remove("asdf");
 
-                Assert.Null(list.Find("qwer"));
+                Assert.Null(linkedList.Find("asdf"));
             }
 
             [Fact]
-            public void RemoveMethod_RemovesMiddleItemFromList()
+            public void RemoveMethod_SetsThe_FirstProperty_ToTheSecondNodeIfTheIteomBeRemovedIsTheHeadOfTheList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("middle");
-                list.AddFirst("qwer");
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("new Item 1");
+                linkedList.AddFirst("new Item 2");
+                // Act
+                linkedList.Remove("new Item 2");
 
-                list.Remove("middle");
+                // Assert
+                Assert.Equal("new Item 1", linkedList.First.Item);
+            }
 
-                Assert.Null(list.Find("middle"));
+            [Fact]
+            public void RemoveMethod_SetsThe_LastProperty_ToTheSecondToLastNodeIfTheItemToBeRemovedIsTheTailOfTheList()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("new Item 1");
+                linkedList.AddLast("new Item 2");
+
+                // Act
+                linkedList.Remove("new Item 2");
+
+                // Assert
+                Assert.Equal("new Item 1", linkedList.Last.Item);
+            }
+            
+            [Fact]
+            public void RemoveMethod_SetsThe_LinkProperty_Of_LastProperty_ToNull()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("new Item 1");
+                linkedList.AddLast("new Item 2");
+
+                // Act
+                linkedList.Remove("new Item 2");
+
+                // Assert
+                if (true)
+                {
+                    
+                }
+                Assert.Null(linkedList.Last.Link);
+            }
+
+            [Fact]
+            public void RemoveMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("new Item 1");
+
+                // Act
+                linkedList.Remove("new Item 1");
+
+                // Assert
+                // acessing linkedList.First throws exception if the head of the list is null
+                Assert.Throws<InvalidOperationException>(
+                    delegate
+                    {
+                        LinkedListNode<string> node = linkedList.First;
+                    });
+            }
+
+            [Fact]
+            public void RemoveMethod_SetsThe_LastProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            {
+                // Arrange
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("new Item 1");
+
+                // Act
+                linkedList.Remove("new Item 1");
+
+                // Assert
+                // acessing linkedList.Last throws exception if the tail of the list is null
+                Assert.Throws<InvalidOperationException>(
+                    delegate
+                    {
+                        LinkedListNode<string> node = linkedList.Last;
+                    });
             }
 
             [Fact]
             public void RemoveMethod_DecrementsLengthOfList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
-                list.AddLast("zxcv");
-                int expectedCount = list.Count - 1;
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                int expectedCount = 0;
+                linkedList.AddLast("asdf"); expectedCount++;
+                linkedList.AddLast("qwer"); expectedCount++;
+                linkedList.AddLast("zxcv"); expectedCount++;
 
-                list.Remove("asdf");
+                linkedList.Remove("asdf"); expectedCount--;
 
-                Assert.Equal(expectedCount, list.Count);
+                Assert.Equal(expectedCount, linkedList.Count);
             }
 
             [Fact]
             public void RemoveMethod_ReturnsFalseIfItemIsNotFound()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("asdf");
+                linkedList.AddLast("qwer");
 
-                bool result = list.Remove("zzzzzzzzzzzzz");
+                bool result = linkedList.Remove("zzzzzzzzzzzzz");
 
                 Assert.False(result);
             }
@@ -200,11 +344,11 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void FindMethod_ReturnsCorrectNode()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
 
-                LinkedListNode<string> node = list.Find("asdf");
+                LinkedListNode<string> node = linkedList.Find("asdf");
 
                 Assert.NotNull(node);
                 Assert.Equal("asdf", node.Item);
@@ -213,11 +357,11 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void FindMethod_ReturnsNullIfItemIsNotFound()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
 
-                LinkedListNode<string> node = list.Find("zzzzzzzzzzzz");
+                LinkedListNode<string> node = linkedList.Find("zzzzzzzzzzzz");
 
                 Assert.Null(node);
             }
@@ -228,25 +372,26 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void RemoveFirstMethod_RemovesTheFirstItemInTheList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
 
-                list.RemoveFirst();
+                linkedList.RemoveFirst();
 
-                Assert.NotEqual("qwer", list.First.Item);
+                Assert.NotEqual("qwer", linkedList.First.Item);
             }
 
+            [Fact]
             public void RemoveFirstMethod_DecrementsLengthOfList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
-                int expectedCount = list.Count - 1;
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                int expectedCount = 0;
+                linkedList.AddFirst("asdf"); expectedCount++;
+                linkedList.AddFirst("qwer"); expectedCount++;
 
-                list.RemoveFirst();
+                linkedList.RemoveFirst(); expectedCount--;
 
-                Assert.Equal(expectedCount, list.Count);
+                Assert.Equal(expectedCount, linkedList.Count);
             }
         }
 
@@ -255,25 +400,26 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void RemoveLastMethod_RemovesTheLastItemInTheList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddLast("asdf");
-                list.AddLast("qwer");
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("asdf");
+                linkedList.AddLast("qwer");
 
-                list.RemoveLast();
+                linkedList.RemoveLast();
 
-                Assert.NotEqual("qwer", list.First.Item);
+                Assert.NotEqual("qwer", linkedList.First.Item);
             }
 
+            [Fact]
             public void RemoveLastMethod_DecrementsLengthOfList()
             {
-                SimpleLinkedList<string> list = new SimpleLinkedList<string>();
-                list.AddFirst("asdf");
-                list.AddFirst("qwer");
-                int expectedCount = list.Count - 1;
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                int expectedCount = 0;
+                linkedList.AddFirst("asdf"); expectedCount++;
+                linkedList.AddFirst("qwer"); expectedCount++;
 
-                list.RemoveLast();
+                linkedList.RemoveLast(); expectedCount--;
 
-                Assert.Equal(expectedCount, list.Count);
+                Assert.Equal(expectedCount, linkedList.Count);
             }
         }
     }
