@@ -70,7 +70,7 @@ namespace DataStuctsAndAlgos.CSharp
         {
             LinkedListNode<T> newNode = new LinkedListNode<T> { Item = item, Link = null };
 
-            if (this._head == null)
+            if (this.IsEmpty)
             {
                 this._head = this._tail = newNode;
             }
@@ -87,7 +87,7 @@ namespace DataStuctsAndAlgos.CSharp
         {
             LinkedListNode<T> newNode = new LinkedListNode<T> { Item = item, Link = null };
 
-            if (this._tail == null)
+            if (this.IsEmpty)
             {
                 this._head = this._tail = newNode;
             }
@@ -108,17 +108,7 @@ namespace DataStuctsAndAlgos.CSharp
         {
             if (this._head.Item.Equals(item)) // if the item to be deleted is in the head of the list
             {
-                if (object.ReferenceEquals(this._head, this._tail)) // if there in only one node in the list
-                {
-                    this._tail = this._head = this._head.Link;
-                }
-                else
-                {
-                    this._head = this._head.Link;
-                }
-                // at this point the node to be deleted (the previous head) will be ready for garbage collection
-
-                this.Count--;
+                this.RemoveFirst();
                 return true;
             }
 
@@ -149,7 +139,7 @@ namespace DataStuctsAndAlgos.CSharp
 
         public void RemoveFirst()
         {
-            if (this.IsEmpty || this._head == null) { throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty"); }
+            if (this.IsEmpty) { throw new InvalidOperationException("RemoveFirst() cannot be called if the list is empty"); }
 
             if (this.Count == 1)
             {
@@ -165,7 +155,7 @@ namespace DataStuctsAndAlgos.CSharp
 
         public void RemoveLast()
         {
-            if (this.IsEmpty || this._tail == null) { throw new InvalidOperationException("RemoveLast() cannot be called if the list is empty"); }
+            if (this.IsEmpty) { throw new InvalidOperationException("RemoveLast() cannot be called if the list is empty"); }
 
             if (this.Count == 1)
             {
@@ -178,7 +168,8 @@ namespace DataStuctsAndAlgos.CSharp
                 {
                     if (currentNode.Link.Link == null)
                     {
-                        currentNode.Link = null;                        
+                        currentNode.Link = null;
+                        this._tail = currentNode;
                         break;
                     }
 
