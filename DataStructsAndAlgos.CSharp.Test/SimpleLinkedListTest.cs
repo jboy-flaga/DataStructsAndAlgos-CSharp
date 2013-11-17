@@ -6,6 +6,19 @@ namespace DataStructsAndAlgos.CSharp.Test
 {
     public class SimpleLinkedListTest
     {
+        #region Constructors
+        public class DefaultConstructor
+        {
+            [Fact]
+            public void DefaultConstructor_SetsLengthToZero()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<String>();
+
+                Assert.Equal(0, linkedList.Count);
+            }
+        }
+        #endregion
+        #region Properties
         public class FirstProperty
         {
             [Fact]
@@ -110,7 +123,9 @@ namespace DataStructsAndAlgos.CSharp.Test
                 Assert.False(linkedList.IsEmpty);
             }
         }
-        
+        #endregion
+
+        #region Methods
         public class AddFirstMethod
         {
             [Fact]
@@ -128,7 +143,7 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void AddFirstMethod_SetsTheLinkPropertyOfTheCurrentHeadToThePreviousHeadOfTheList()
+            public void AddFirstMethod_SetsThe_LinkProperty_OfTheCurrentHeadToThePreviousHeadOfTheList()
             {
                 // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
@@ -172,21 +187,22 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void AddLastMethod_SetsTheLinkPropertyOfThePreviousTailToTheCurrentTailOfTheList()
+            public void AddLastMethod_SetsThe_LinkProperty_OfThePreviousTailToTheCurrentTailOfTheList()
             {
                 // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
                 // Act
                 linkedList.AddLast("new Item 1");
+                LinkedListNode<string> previousTail = linkedList.Last;
+
                 linkedList.AddLast("new Item 2");
+                LinkedListNode<string> currentTail = linkedList.Last;
 
                 // Assert
-                LinkedListNode<string> previousLastNode = linkedList.Find("new Item 1");
-                LinkedListNode<string> currentLastNode = linkedList.Find("new Item 2");
-
-                Assert.ReferenceEquals(previousLastNode.Link, currentLastNode);
-                Assert.Equal("new Item 2", previousLastNode.Link.Item);
+                
+                Assert.ReferenceEquals(previousTail.Link, currentTail);
+                Assert.Equal("new Item 2", previousTail.Link.Item);
             }
 
             [Fact]
@@ -197,6 +213,34 @@ namespace DataStructsAndAlgos.CSharp.Test
                 linkedList.AddLast("asdf");
 
                 Assert.True(linkedList.Count == 1);
+            }
+        }
+
+        public class FindMethod
+        {
+            [Fact]
+            public void FindMethod_ReturnsCorrectNode()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
+
+                LinkedListNode<string> node = linkedList.Find("asdf");
+
+                Assert.NotNull(node);
+                Assert.Equal("asdf", node.Item);
+            }
+
+            [Fact]
+            public void FindMethod_ReturnsNullIfItemIsNotFound()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddFirst("asdf");
+                linkedList.AddFirst("qwer");
+
+                LinkedListNode<string> node = linkedList.Find("zzzzzzzzzzzz");
+
+                Assert.Null(node);
             }
         }
 
@@ -254,7 +298,7 @@ namespace DataStructsAndAlgos.CSharp.Test
                 // Assert
                 Assert.Equal("new Item 1", linkedList.Last.Item);
             }
-            
+
             [Fact]
             public void RemoveMethod_SetsThe_LinkProperty_Of_LastProperty_ToNull()
             {
@@ -269,7 +313,7 @@ namespace DataStructsAndAlgos.CSharp.Test
                 // Assert
                 if (true)
                 {
-                    
+
                 }
                 Assert.Null(linkedList.Last.Link);
             }
@@ -336,34 +380,6 @@ namespace DataStructsAndAlgos.CSharp.Test
                 bool result = linkedList.Remove("zzzzzzzzzzzzz");
 
                 Assert.False(result);
-            }
-        }
-
-        public class FindMethod
-        {
-            [Fact]
-            public void FindMethod_ReturnsCorrectNode()
-            {
-                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
-                linkedList.AddFirst("asdf");
-                linkedList.AddFirst("qwer");
-
-                LinkedListNode<string> node = linkedList.Find("asdf");
-
-                Assert.NotNull(node);
-                Assert.Equal("asdf", node.Item);
-            }
-
-            [Fact]
-            public void FindMethod_ReturnsNullIfItemIsNotFound()
-            {
-                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
-                linkedList.AddFirst("asdf");
-                linkedList.AddFirst("qwer");
-
-                LinkedListNode<string> node = linkedList.Find("zzzzzzzzzzzz");
-
-                Assert.Null(node);
             }
         }
 
@@ -550,5 +566,6 @@ namespace DataStructsAndAlgos.CSharp.Test
                 Assert.Equal(expectedCount, linkedList.Count);
             }
         }
+        #endregion
     }
 }

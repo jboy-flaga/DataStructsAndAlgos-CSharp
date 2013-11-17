@@ -9,7 +9,8 @@ namespace DataStuctsAndAlgos.CSharp
         private LinkedListNode<T> _tail;
         #endregion
 
-        #region Public Properties
+        #region Public Properties        
+        public int Count { get; private set; }
 
         public LinkedListNode<T> First
         {
@@ -23,6 +24,11 @@ namespace DataStuctsAndAlgos.CSharp
             }
         }
 
+        public bool IsEmpty
+        {
+            get { return this.Count <= 0; }
+        }
+
         public LinkedListNode<T> Last
         {
             get
@@ -34,13 +40,6 @@ namespace DataStuctsAndAlgos.CSharp
                 return this._tail;
             }
         }
-
-        public int Count { get; private set; }
-
-        public bool IsEmpty
-        {
-            get { return this.Count <= 0; }
-        }
         #endregion
 
         #region Constructors
@@ -51,22 +50,7 @@ namespace DataStuctsAndAlgos.CSharp
         #endregion
 
         #region Public Methods
-        public LinkedListNode<T> Find(T item)
-        {
-            LinkedListNode<T> currentNode = this._head;
-            while (currentNode != null)
-            {
-                if (currentNode.Item.Equals(item))
-                {
-                    return currentNode;
-                }
-                currentNode = currentNode.Link;
-            }
-
-            return null;
-        }
-
-        public void AddFirst(T item)
+               public void AddFirst(T item)
         {
             LinkedListNode<T> newNode = new LinkedListNode<T> { Item = item, Link = null };
 
@@ -98,6 +82,21 @@ namespace DataStuctsAndAlgos.CSharp
             }
 
             this.Count++;
+        }
+
+        public LinkedListNode<T> Find(T item)
+        {
+            LinkedListNode<T> currentNode = this._head;
+            while (currentNode != null)
+            {
+                if (currentNode.Item.Equals(item))
+                {
+                    return currentNode;
+                }
+                currentNode = currentNode.Link;
+            }
+
+            return null;
         }
 
         /** 
