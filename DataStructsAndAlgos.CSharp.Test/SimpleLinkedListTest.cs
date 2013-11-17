@@ -131,13 +131,10 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void AddFirstMethod_AddsNewItemAtTheHeadOfList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                // Act
                 linkedList.AddFirst("new Item 1");
 
-                // Assert
                 Assert.ReferenceEquals(linkedList.First, "new Item 1");
                 Assert.Equal("new Item 1", linkedList.First.Item);
             }
@@ -145,14 +142,11 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void AddFirstMethod_SetsThe_LinkProperty_OfTheCurrentHeadToThePreviousHeadOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                // Act
                 linkedList.AddFirst("new Item 1");
                 linkedList.AddFirst("new Item 2");
 
-                // Assert
                 Assert.ReferenceEquals(linkedList.First.Link, "new Item 1");
                 Assert.Equal("new Item 1", linkedList.First.Link.Item);
             }
@@ -174,14 +168,11 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void AddLastMethod_AddsNewItemAtTheTailOfList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                // Act
                 linkedList.AddLast("new Item 1");
                 linkedList.AddLast("new Item 2");
 
-                // Assert
                 Assert.ReferenceEquals(linkedList.Last, "new Item 2");
                 Assert.True(linkedList.Last.Item == "new Item 2");
             }
@@ -189,18 +180,14 @@ namespace DataStructsAndAlgos.CSharp.Test
             [Fact]
             public void AddLastMethod_SetsThe_LinkProperty_OfThePreviousTailToTheCurrentTailOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
 
-                // Act
                 linkedList.AddLast("new Item 1");
                 LinkedListNode<string> previousTail = linkedList.Last;
 
                 linkedList.AddLast("new Item 2");
                 LinkedListNode<string> currentTail = linkedList.Last;
 
-                // Assert
-                
                 Assert.ReferenceEquals(previousTail.Link, currentTail);
                 Assert.Equal("new Item 2", previousTail.Link.Item);
             }
@@ -247,7 +234,7 @@ namespace DataStructsAndAlgos.CSharp.Test
         public class RemoveMethod
         {
             [Fact]
-            public void RemoveMethod_RemovesCorrectItemItemFromListWithMultipleItems()
+            public void RemoveMethod_RemovesCorrectItemFromListWithMultipleItems()
             {
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("asdf");
@@ -271,64 +258,49 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveMethod_SetsThe_FirstProperty_ToTheSecondNodeIfTheIteomBeRemovedIsTheHeadOfTheList()
+            public void RemoveMethod_SetsThe_FirstProperty_ToTheSecondNodeIfTheItemToBeRemovedIsTheHeadOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("new Item 1");
                 linkedList.AddFirst("new Item 2");
-                // Act
+
                 linkedList.Remove("new Item 2");
 
-                // Assert
                 Assert.Equal("new Item 1", linkedList.First.Item);
             }
 
             [Fact]
             public void RemoveMethod_SetsThe_LastProperty_ToTheSecondToLastNodeIfTheItemToBeRemovedIsTheTailOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
                 linkedList.AddLast("new Item 2");
 
-                // Act
                 linkedList.Remove("new Item 2");
 
-                // Assert
                 Assert.Equal("new Item 1", linkedList.Last.Item);
             }
 
             [Fact]
             public void RemoveMethod_SetsThe_LinkProperty_Of_LastProperty_ToNull()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
                 linkedList.AddLast("new Item 2");
 
-                // Act
                 linkedList.Remove("new Item 2");
 
-                // Assert
-                if (true)
-                {
-
-                }
                 Assert.Null(linkedList.Last.Link);
             }
 
             [Fact]
-            public void RemoveMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("new Item 1");
 
-                // Act
                 linkedList.Remove("new Item 1");
-
-                // Assert
+                                // Assert
                 // acessing linkedList.First throws exception if the head of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
@@ -338,16 +310,13 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveMethod_SetsThe_LastProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveMethod_SetsThe_LastProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
 
-                // Act
                 linkedList.Remove("new Item 1");
 
-                // Assert
                 // acessing linkedList.Last throws exception if the tail of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
@@ -371,7 +340,7 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveMethod_ReturnsFalseIfItemIsNotFound()
+            public void RemoveMethod_ReturnsFalseIfItemToBeRemovedIsNotFound()
             {
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("asdf");
@@ -380,6 +349,18 @@ namespace DataStructsAndAlgos.CSharp.Test
                 bool result = linkedList.Remove("zzzzzzzzzzzzz");
 
                 Assert.False(result);
+            }
+            
+            [Fact]
+            public void RemoveMethod_ReturnsTrueIfItemToBeRemovedIsFound()
+            {
+                SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
+                linkedList.AddLast("asdf");
+                linkedList.AddLast("qwer");
+
+                bool result = linkedList.Remove("asdf");
+
+                Assert.True(result);
             }
         }
 
@@ -409,31 +390,25 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveFirstMethod_SetsThe_FirstProperty_ToTheSecondNodeIfTheIteomBeRemovedIsTheHeadOfTheList()
+            public void RemoveFirstMethod_SetsThe_FirstProperty_ToTheSecondNodeIfTheItemToBeRemovedIsTheHeadOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("new Item 1");
                 linkedList.AddFirst("new Item 2");
 
-                // Act
                 linkedList.RemoveFirst();
 
-                // Assert
                 Assert.Equal("new Item 1", linkedList.First.Item);
             }
 
             [Fact]
-            public void RemoveFirstMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveFirstMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("new Item 1");
 
-                // Act
                 linkedList.RemoveFirst();
 
-                // Assert
                 // acessing linkedList.First throws exception if the head of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
@@ -443,16 +418,13 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveFirstMethod_SetsThe_LastProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveFirstMethod_SetsThe_LastProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
 
-                // Act
                 linkedList.RemoveFirst();
 
-                // Assert
                 // acessing linkedList.Last throws exception if the tail of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
@@ -486,11 +458,11 @@ namespace DataStructsAndAlgos.CSharp.Test
 
                 linkedList.RemoveLast();
 
-                Assert.NotEqual("qwer", linkedList.First.Item);
+                Assert.NotEqual("qwer", linkedList.Last.Item);
             }
 
             [Fact]
-            public void RemoveLastMethod_RemovesTheOnlyItemFromList()
+            public void RemoveLastMethod_RemovesTheOnlyItemInTheList()
             {
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("asdf");
@@ -499,33 +471,27 @@ namespace DataStructsAndAlgos.CSharp.Test
 
                 Assert.Null(linkedList.Find("asdf"));
             }
-            
+
             [Fact]
             public void RemoveLastMethod_SetsThe_LastProperty_ToTheSecondToLastNodeIfTheItemToBeRemovedIsTheTailOfTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
                 linkedList.AddLast("new Item 2");
 
-                // Act
                 linkedList.RemoveLast();
 
-                // Assert
                 Assert.Equal("new Item 1", linkedList.Last.Item);
             }
-            
+
             [Fact]
-            public void RemoveLastMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveLastMethod_SetsThe_FirstProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddFirst("new Item 1");
 
-                // Act
                 linkedList.RemoveLast();
 
-                // Assert
                 // acessing linkedList.First throws exception if the head of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
@@ -535,16 +501,13 @@ namespace DataStructsAndAlgos.CSharp.Test
             }
 
             [Fact]
-            public void RemoveLastMethod_SetsThe_LastProperty_ToNullIfTheItemToBeDeletedIsTheOnlyItemInTheList()
+            public void RemoveLastMethod_SetsThe_LastProperty_ToNullIfTheItemToBeRemovedIsTheOnlyItemInTheList()
             {
-                // Arrange
                 SimpleLinkedList<string> linkedList = new SimpleLinkedList<string>();
                 linkedList.AddLast("new Item 1");
 
-                // Act
                 linkedList.RemoveLast();
 
-                // Assert
                 // acessing linkedList.Last throws exception if the tail of the list is null
                 Assert.Throws<InvalidOperationException>(
                     delegate
